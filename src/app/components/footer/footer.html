@@ -1,0 +1,77 @@
+<footer class="footer">
+  <!-- Newsletter strip -->
+  <div class="newsletter-strip">
+    <div class="container newsletter-inner">
+      <div class="newsletter-text">
+        <i class="bi bi-bell-fill"></i>
+        <div>
+          <strong>Suscríbete a nuestro boletín</strong>
+          <span>Consejos de cuidado animal, ofertas exclusivas y más.</span>
+        </div>
+      </div>
+      <div class="newsletter-form">
+        <input type="email" placeholder="tu@correo.com">
+        <button class="btn-primary" type="button">
+          <i class="bi bi-send-fill"></i> Suscribirse
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main footer -->
+  <div class="footer-main">
+    <div class="container footer-grid">
+      <!-- Brand col -->
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <span class="logo-icon"><i class="bi bi-heart-fill"></i></span>
+          <span class="logo-text">Pet<strong>Nest</strong></span>
+        </a>
+        <p class="brand-desc">
+          Somos el centro integral de bienestar animal más confiable de Lima. Cuidamos a tu mascota como si fuera nuestra.
+        </p>
+        <div class="social-row">
+          <a
+            *ngFor="let s of socials"
+            [href]="s.href"
+            [attr.aria-label]="s.label"
+            class="social-link"
+          >
+            <i class="bi" [ngClass]="s.icon"></i>
+          </a>
+        </div>
+        <div class="badge-row">
+          <span class="trust-badge"><i class="bi bi-shield-fill-check"></i> Certificado SENASA</span>
+          <span class="trust-badge"><i class="bi bi-award-fill"></i> Premio 2024</span>
+        </div>
+      </div>
+
+      <!-- Link columns -->
+      <div class="footer-links-group">
+        <div class="footer-col" *ngFor="let col of footerLinks">
+          <h5 class="footer-col-title">{{ col.title }}</h5>
+          <ul class="footer-link-list">
+            <li *ngFor="let link of col.links">
+              <a [href]="link.href">{{ link.label }}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="footer-bottom">
+    <div class="container footer-bottom-inner">
+      <p>&copy; {{ currentYear }} PetNest. Todos los derechos reservados.</p>
+      <div class="bottom-links">
+        <a href="#">Privacidad</a>
+        <a href="#">Términos</a>
+        <a href="#">Cookies</a>
+      </div>
+      <p class="made-with">
+        Hecho con <i class="bi bi-heart-fill"></i> por el equipo PetNest
+      </p>
+    </div>
+  </div>
+</footer>

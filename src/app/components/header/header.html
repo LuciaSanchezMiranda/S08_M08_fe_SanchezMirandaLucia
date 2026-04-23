@@ -1,0 +1,23 @@
+<header class="header" [class.scrolled]="isScrolled">
+  <div class="container header-inner">
+    <a href="#" class="logo">
+      <span class="logo-icon"><i class="bi bi-heart-fill"></i></span>
+      <span class="logo-text">Pet<strong>Nest</strong></span>
+    </a>
+
+    <nav class="nav" [class.open]="menuOpen">
+      <ul class="nav-list">
+        <li *ngFor="let link of navLinks">
+          <a [href]="link.href" class="nav-link" (click)="closeMenu()">{{ link.label }}</a>
+        </li>
+      </ul>
+      <a href="#contacto" class="btn-primary nav-cta" (click)="closeMenu()">
+        <i class="bi bi-calendar-check"></i> Reservar cita
+      </a>
+    </nav>
+
+    <button class="hamburger" (click)="toggleMenu()" [class.active]="menuOpen" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>

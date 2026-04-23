@@ -1,0 +1,58 @@
+<section class="benefits" id="beneficios">
+  <div class="container">
+    <div class="benefits-top">
+      <div class="benefits-header">
+        <span class="section-tag"><i class="bi bi-trophy-fill"></i> Por qué elegirnos</span>
+        <h2 class="section-title">Más que una clínica,<br>somos su familia</h2>
+        <p class="section-subtitle">
+          Creemos que cada mascota merece atención de calidad y amor genuino. Estos son los valores que nos distinguen.
+        </p>
+      </div>
+      <div class="benefits-cta-block">
+        <div class="cta-stat"><span>98%</span><p>de clientes satisfechos</p></div>
+        <a href="#contacto" class="btn-primary">
+          <i class="bi bi-telephone-fill"></i> Agendar ahora
+        </a>
+      </div>
+    </div>
+
+    <div class="benefits-grid">
+      <div class="benefit-item" *ngFor="let b of benefits">
+        <div class="benefit-icon">
+          <i class="bi" [ngClass]="b.icon"></i>
+        </div>
+        <div>
+          <h4 class="benefit-title">{{ b.title }}</h4>
+          <p class="benefit-desc">{{ b.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Testimonials -->
+  <div class="testimonials-wrap" id="adopcion">
+    <div class="container">
+      <div class="testimonials-header">
+        <span class="section-tag"><i class="bi bi-chat-quote-fill"></i> Testimonios</span>
+        <h2 class="section-title">Lo que dicen nuestras familias</h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card" *ngFor="let t of testimonials">
+          <div class="testimonial-stars">
+            <i class="bi bi-star-fill" *ngFor="let s of getStars(t.rating)"></i>
+          </div>
+          <p class="testimonial-text">"{{ t.text }}"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">
+              <i class="bi bi-person-fill"></i>
+            </div>
+            <div>
+              <span class="author-name">{{ t.name }}</span>
+              <span class="author-pet">{{ t.pet }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

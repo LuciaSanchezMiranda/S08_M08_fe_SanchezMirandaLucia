@@ -1,0 +1,64 @@
+<section class="hero" id="inicio">
+  <div class="hero-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="paw-pattern"></div>
+  </div>
+
+  <div class="container hero-inner">
+    <div class="hero-content">
+      <div class="hero-tag">
+        <i class="bi bi-patch-check-fill"></i> Servicio veterinario de confianza
+      </div>
+      <h1 class="hero-title">
+        Tu mascota merece<br>
+        <em>el mejor cuidado</em><br>
+        del mundo
+      </h1>
+      <p class="hero-desc">
+        En PetNest ofrecemos adopción responsable, cuidados veterinarios, tienda especializada y guardería para que tu compañero viva feliz y saludable.
+      </p>
+      <div class="hero-actions">
+        <a href="#servicios" class="btn-primary">
+          <i class="bi bi-arrow-right-circle-fill"></i> Conocer servicios
+        </a>
+        <a href="#adopcion" class="btn-secondary">
+          <i class="bi bi-heart"></i> Adoptar ahora
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat" *ngFor="let s of stats">
+          <i class="bi" [ngClass]="s.icon"></i>
+          <div>
+            <span class="stat-value">{{ s.value }}</span>
+            <span class="stat-label">{{ s.label }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-card main-card">
+        <div class="card-badge"><i class="bi bi-shield-fill-check"></i> Veterinario certificado</div>
+        <div class="pet-illustration">
+          <div class="pet-circle">
+            <i class="bi bi-emoji-heart-eyes-fill"></i>
+          </div>
+        </div>
+        <p class="card-title">Rocky está listo para<br>su próxima consulta</p>
+        <div class="card-tags">
+          <span><i class="bi bi-capsule"></i> Vacunas al día</span>
+          <span><i class="bi bi-activity"></i> Saludable</span>
+        </div>
+      </div>
+
+      <div class="float-pill pill-1">
+        <i class="bi bi-house-heart-fill"></i> +12 hogares esta semana
+      </div>
+      <div class="float-pill pill-2">
+        <i class="bi bi-clock-fill"></i> Atención 24/7
+      </div>
+    </div>
+  </div>
+</section>

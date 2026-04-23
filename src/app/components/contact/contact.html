@@ -1,0 +1,134 @@
+<section class="contact" id="contacto">
+  <div class="container">
+    <div class="contact-inner">
+
+      <!-- Left Info -->
+      <div class="contact-info">
+        <span class="section-tag"><i class="bi bi-send-fill"></i> Contáctanos</span>
+        <h2 class="section-title">Agenda una cita<br>para tu mascota</h2>
+        <p class="section-subtitle">
+          Completa el formulario y nos pondremos en contacto contigo en menos de 2 horas para confirmar tu reserva.
+        </p>
+
+        <div class="info-list">
+          <div class="info-item" *ngFor="let item of contactInfo">
+            <div class="info-icon">
+              <i class="bi" [ngClass]="item.icon"></i>
+            </div>
+            <div>
+              <span class="info-label">{{ item.label }}</span>
+              <span class="info-value">{{ item.value }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="social-row">
+          <span class="social-label">Síguenos en redes</span>
+          <div class="social-links">
+            <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+            <a href="#" aria-label="TikTok"><i class="bi bi-tiktok"></i></a>
+            <a href="#" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Form -->
+      <div class="contact-form-wrap">
+        <div class="success-banner" *ngIf="success">
+          <i class="bi bi-check-circle-fill"></i>
+          <div>
+            <strong>¡Mensaje enviado!</strong>
+            <p>Te contactaremos pronto para confirmar tu cita.</p>
+          </div>
+        </div>
+
+        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name"><i class="bi bi-person"></i> Nombre completo</label>
+              <input
+                id="name"
+                type="text"
+                formControlName="name"
+                placeholder="Tu nombre"
+                [class.error]="submitted && f['name'].errors"
+              >
+              <span class="error-msg" *ngIf="submitted && f['name'].errors?.['required']">El nombre es requerido.</span>
+              <span class="error-msg" *ngIf="submitted && f['name'].errors?.['minlength']">Mínimo 3 caracteres.</span>
+            </div>
+            <div class="form-group">
+              <label for="email"><i class="bi bi-envelope"></i> Correo electrónico</label>
+              <input
+                id="email"
+                type="email"
+                formControlName="email"
+                placeholder="tu@correo.com"
+                [class.error]="submitted && f['email'].errors"
+              >
+              <span class="error-msg" *ngIf="submitted && f['email'].errors?.['required']">El correo es requerido.</span>
+              <span class="error-msg" *ngIf="submitted && f['email'].errors?.['email']">Correo inválido.</span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone"><i class="bi bi-telephone"></i> Teléfono</label>
+              <input
+                id="phone"
+                type="tel"
+                formControlName="phone"
+                placeholder="+51 999 999 999"
+                [class.error]="submitted && f['phone'].errors"
+              >
+              <span class="error-msg" *ngIf="submitted && f['phone'].errors?.['required']">El teléfono es requerido.</span>
+              <span class="error-msg" *ngIf="submitted && f['phone'].errors?.['pattern']">Teléfono inválido.</span>
+            </div>
+            <div class="form-group">
+              <label for="petName"><i class="bi bi-heart"></i> Nombre de tu mascota</label>
+              <input
+                id="petName"
+                type="text"
+                formControlName="petName"
+                placeholder="Rocky, Luna, Max..."
+                [class.error]="submitted && f['petName'].errors"
+              >
+              <span class="error-msg" *ngIf="submitted && f['petName'].errors?.['required']">El nombre de tu mascota es requerido.</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="service"><i class="bi bi-grid"></i> Servicio de interés</label>
+            <select
+              id="service"
+              formControlName="service"
+              [class.error]="submitted && f['service'].errors"
+            >
+              <option value="" disabled selected>Selecciona un servicio</option>
+              <option *ngFor="let s of services" [value]="s">{{ s }}</option>
+            </select>
+            <span class="error-msg" *ngIf="submitted && f['service'].errors?.['required']">Selecciona un servicio.</span>
+          </div>
+
+          <div class="form-group">
+            <label for="message"><i class="bi bi-chat-text"></i> Cuéntanos más</label>
+            <textarea
+              id="message"
+              formControlName="message"
+              placeholder="Describe brevemente la situación de tu mascota o qué necesitas..."
+              rows="4"
+              [class.error]="submitted && f['message'].errors"
+            ></textarea>
+            <span class="error-msg" *ngIf="submitted && f['message'].errors?.['required']">El mensaje es requerido.</span>
+            <span class="error-msg" *ngIf="submitted && f['message'].errors?.['minlength']">Mínimo 10 caracteres.</span>
+          </div>
+
+          <button type="submit" class="btn-submit">
+            <i class="bi bi-send-fill"></i> Enviar solicitud
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>

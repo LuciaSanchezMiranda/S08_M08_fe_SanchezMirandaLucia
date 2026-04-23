@@ -1,0 +1,36 @@
+<section class="services" id="servicios">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag"><i class="bi bi-grid-fill"></i> Lo que ofrecemos</span>
+      <h2 class="section-title">Servicios diseñados<br>para el bienestar animal</h2>
+      <p class="section-subtitle">Desde atención veterinaria de emergencia hasta grooming y hospedaje, somos el centro integral que tu mascota merece.</p>
+    </div>
+
+    <div class="services-grid">
+      <div
+        class="service-card"
+        *ngFor="let service of services"
+        [class.featured]="service.featured"
+        [style.--card-bg]="service.color"
+      >
+        <div class="service-icon-wrap">
+          <i class="bi" [ngClass]="service.icon"></i>
+        </div>
+        <span class="service-category">{{ service.category }}</span>
+        <h3 class="service-title">{{ service.title }}</h3>
+        <p class="service-desc">{{ service.description }}</p>
+        <ul class="service-features">
+          <li *ngFor="let f of service.features">
+            <i class="bi bi-check-circle-fill"></i> {{ f }}
+          </li>
+        </ul>
+        <a href="#contacto" class="service-cta">
+          Reservar <i class="bi bi-arrow-right"></i>
+        </a>
+        <div class="featured-badge" *ngIf="service.featured">
+          <i class="bi bi-star-fill"></i> Más solicitado
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
