@@ -31,100 +31,115 @@
             <a href="#" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
           </div>
         </div>
+
+        <!-- CTA Button to CRUD -->
+        <button type="button" class="btn-crud" (click)="goToCrud()">
+          <i class="bi bi-list-check"></i>
+          Ver todas mis solicitudes
+        </button>
       </div>
 
       <!-- Right Form -->
       <div class="contact-form-wrap">
-        <div class="success-banner" *ngIf="success">
+        <div class="success-banner" *ngIf="successMessage()">
           <i class="bi bi-check-circle-fill"></i>
           <div>
             <strong>¡Mensaje enviado!</strong>
-            <p>Te contactaremos pronto para confirmar tu cita.</p>
+            <p>{{ successMessage() }}</p>
+          </div>
+        </div>
+
+        <div class="error-banner" *ngIf="errorMessage()">
+          <i class="bi bi-exclamation-circle-fill"></i>
+          <div>
+            <strong>Error</strong>
+            <p>{{ errorMessage() }}</p>
           </div>
         </div>
 
         <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" novalidate>
           <div class="form-row">
             <div class="form-group">
-              <label for="name"><i class="bi bi-person"></i> Nombre completo</label>
+              <label for="nombre"><i class="bi bi-person"></i> Nombre completo</label>
               <input
-                id="name"
+                id="nombre"
                 type="text"
-                formControlName="name"
+                formControlName="nombreCompleto"
                 placeholder="Tu nombre"
-                [class.error]="submitted && f['name'].errors"
+                [class.error]="submitted && f['nombreCompleto'].errors"
               >
-              <span class="error-msg" *ngIf="submitted && f['name'].errors?.['required']">El nombre es requerido.</span>
-              <span class="error-msg" *ngIf="submitted && f['name'].errors?.['minlength']">Mínimo 3 caracteres.</span>
+              <span class="error-msg" *ngIf="submitted && f['nombreCompleto'].errors?.['required']">El nombre es requerido.</span>
+              <span class="error-msg" *ngIf="submitted && f['nombreCompleto'].errors?.['minlength']">Mínimo 3 caracteres.</span>
             </div>
             <div class="form-group">
-              <label for="email"><i class="bi bi-envelope"></i> Correo electrónico</label>
+              <label for="correo"><i class="bi bi-envelope"></i> Correo electrónico</label>
               <input
-                id="email"
+                id="correo"
                 type="email"
-                formControlName="email"
+                formControlName="correo"
                 placeholder="tu@correo.com"
-                [class.error]="submitted && f['email'].errors"
+                [class.error]="submitted && f['correo'].errors"
               >
-              <span class="error-msg" *ngIf="submitted && f['email'].errors?.['required']">El correo es requerido.</span>
-              <span class="error-msg" *ngIf="submitted && f['email'].errors?.['email']">Correo inválido.</span>
+              <span class="error-msg" *ngIf="submitted && f['correo'].errors?.['required']">El correo es requerido.</span>
+              <span class="error-msg" *ngIf="submitted && f['correo'].errors?.['email']">Correo inválido.</span>
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group">
-              <label for="phone"><i class="bi bi-telephone"></i> Teléfono</label>
+              <label for="telefono"><i class="bi bi-telephone"></i> Teléfono</label>
               <input
-                id="phone"
+                id="telefono"
                 type="tel"
-                formControlName="phone"
+                formControlName="telefono"
                 placeholder="+51 999 999 999"
-                [class.error]="submitted && f['phone'].errors"
+                [class.error]="submitted && f['telefono'].errors"
               >
-              <span class="error-msg" *ngIf="submitted && f['phone'].errors?.['required']">El teléfono es requerido.</span>
-              <span class="error-msg" *ngIf="submitted && f['phone'].errors?.['pattern']">Teléfono inválido.</span>
+              <span class="error-msg" *ngIf="submitted && f['telefono'].errors?.['required']">El teléfono es requerido.</span>
+              <span class="error-msg" *ngIf="submitted && f['telefono'].errors?.['pattern']">Teléfono inválido.</span>
             </div>
             <div class="form-group">
-              <label for="petName"><i class="bi bi-heart"></i> Nombre de tu mascota</label>
+              <label for="mascota"><i class="bi bi-heart"></i> Nombre de tu mascota</label>
               <input
-                id="petName"
+                id="mascota"
                 type="text"
-                formControlName="petName"
+                formControlName="nombreMascota"
                 placeholder="Rocky, Luna, Max..."
-                [class.error]="submitted && f['petName'].errors"
+                [class.error]="submitted && f['nombreMascota'].errors"
               >
-              <span class="error-msg" *ngIf="submitted && f['petName'].errors?.['required']">El nombre de tu mascota es requerido.</span>
+              <span class="error-msg" *ngIf="submitted && f['nombreMascota'].errors?.['required']">El nombre de tu mascota es requerido.</span>
             </div>
           </div>
 
           <div class="form-group">
-            <label for="service"><i class="bi bi-grid"></i> Servicio de interés</label>
+            <label for="servicio"><i class="bi bi-grid"></i> Servicio de interés</label>
             <select
-              id="service"
-              formControlName="service"
-              [class.error]="submitted && f['service'].errors"
+              id="servicio"
+              formControlName="servicio"
+              [class.error]="submitted && f['servicio'].errors"
             >
               <option value="" disabled selected>Selecciona un servicio</option>
               <option *ngFor="let s of services" [value]="s">{{ s }}</option>
             </select>
-            <span class="error-msg" *ngIf="submitted && f['service'].errors?.['required']">Selecciona un servicio.</span>
+            <span class="error-msg" *ngIf="submitted && f['servicio'].errors?.['required']">Selecciona un servicio.</span>
           </div>
 
           <div class="form-group">
-            <label for="message"><i class="bi bi-chat-text"></i> Cuéntanos más</label>
+            <label for="mensaje"><i class="bi bi-chat-text"></i> Cuéntanos más</label>
             <textarea
-              id="message"
-              formControlName="message"
+              id="mensaje"
+              formControlName="mensaje"
               placeholder="Describe brevemente la situación de tu mascota o qué necesitas..."
               rows="4"
-              [class.error]="submitted && f['message'].errors"
+              [class.error]="submitted && f['mensaje'].errors"
             ></textarea>
-            <span class="error-msg" *ngIf="submitted && f['message'].errors?.['required']">El mensaje es requerido.</span>
-            <span class="error-msg" *ngIf="submitted && f['message'].errors?.['minlength']">Mínimo 10 caracteres.</span>
+            <span class="error-msg" *ngIf="submitted && f['mensaje'].errors?.['required']">El mensaje es requerido.</span>
+            <span class="error-msg" *ngIf="submitted && f['mensaje'].errors?.['minlength']">Mínimo 10 caracteres.</span>
           </div>
 
-          <button type="submit" class="btn-submit">
-            <i class="bi bi-send-fill"></i> Enviar solicitud
+          <button type="submit" class="btn-submit" [disabled]="isLoading()">
+            <i class="bi" [ngClass]="isLoading() ? 'bi-hourglass-split' : 'bi-send-fill'"></i>
+            {{ isLoading() ? 'Enviando...' : 'Enviar solicitud' }}
           </button>
         </form>
       </div>

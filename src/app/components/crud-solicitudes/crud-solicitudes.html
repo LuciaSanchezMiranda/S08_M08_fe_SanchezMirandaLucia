@@ -1,0 +1,363 @@
+<div class="crud-container">
+  <div class="container">
+    <div class="crud-header">
+      <div class="header-content">
+        <h2>
+          <i class="bi bi-list-check"></i>
+          Gestión de Solicitudes de Cita
+        </h2>
+        <p>Administra todas las solicitudes de cita de tus mascotas</p>
+      </div>
+      <button type="button" class="btn-primary" (click)="goToForm()">
+        <i class="bi bi-plus-circle-fill"></i> Nueva Solicitud
+      </button>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-bar">
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+        <input
+          type="text"
+          placeholder="Buscar por nombre, correo o mascota..."
+          [(ngModel)]="searchTerm"
+          (input)="onSearchChange()"
+        />
+      </div>
+      <div class="status-filter">
+        <label for="statusFilter">Estado:</label>
+        <select id="statusFilter" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
+          <option value="">-- Todos --</option>
+          <option value="Pendiente">Pendiente</option>
+          <option value="Confirmado">Confirmado</option>
+          <option value="Completado">Completado</option>
+          <option value="Cancelado">Cancelado</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    @if (isLoading()) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Cargando solicitudes...</p>
+      </div>
+    } @else if (filteredSolicitudes().length === 0) {
+      <!-- Empty State -->
+      <div class="empty-state">
+        <i class="bi bi-inbox"></i>
+        <h3>No hay solicitudes</h3>
+        <p>{{ searchTerm() ? 'No se encontraron solicitudes con esos criterios.' : 'Crea tu primera solicitud de cita.' }}</p>
+        @if (!searchTerm()) {
+          <button type="button" class="btn-primary" (click)="goToForm()">
+            <i class="bi bi-plus-circle-fill"></i> Crear Primera Solicitud
+          </button>
+        }
+      </div>
+    } @else {
+      <!-- Table View -->
+      <div class="table-responsive">
+        <table class="solicitudes-table">
+          <thead>
+            <tr>
+              <th>Mascota</th>
+              <th>Propietario</th>
+              <th>Servicio</th>
+              <th>Estado</th>
+              <th>Fecha Solicitud</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (solicitud of filteredSolicitudes(); track solicitud.idSolicitud) {
+              <tr [class.deleted-row]="solicitud.fechaEliminacion">
+                <td data-label="Mascota">
+                  <span class="badge badge-pet">
+                    <i class="bi bi-paw-fill"></i>
+                    {{ solicitud.nombreMascota }}
+                  </span>
+                </td>
+                <td data-label="Propietario">{{ solicitud.nombreCompleto }}</td>
+                <td data-label="Servicio">{{ solicitud.servicio }}</td>
+                <td data-label="Estado">
+                  <span [class]="'badge badge-' + (solicitud.estado | lowercase)">
+                    {{ solicitud.estado }}
+                  </span>
+                </td>
+                <td data-label="Fecha Solicitud">
+                  {{ solicitud.fechaCreacion | date: 'dd/MM/yyyy HH:mm' }}
+                </td>
+                <td data-label="Acciones">
+                  <div class="action-buttons">
+                    <button
+                      type="button"
+                      class="btn-action btn-view"
+                      (click)="openDetails(solicitud)"
+                      title="Ver detalles"
+                    >
+                      <i class="bi bi-eye-fill"></i>
+                    </button>
+                    @if (!solicitud.fechaEliminacion) {
+                      <button
+                        type="button"
+                        class="btn-action btn-edit"
+                        (click)="openEditModal(solicitud)"
+                        title="Editar"
+                      >
+                        <i class="bi bi-pencil-fill"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn-action btn-delete"
+                        (click)="confirmDelete(solicitud)"
+                        title="Eliminar"
+                      >
+                        <i class="bi bi-trash-fill"></i>
+                      </button>
+                    } @else {
+                      <button
+                        type="button"
+                        class="btn-action btn-restore"
+                        (click)="confirmRestore(solicitud)"
+                        title="Restaurar"
+                      >
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                      </button>
+                    }
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+
+  <!-- Details Modal -->
+  @if (showDetailsModal()) {
+    <div class="modal-overlay" (click)="closeModals()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Detalles de la Solicitud</h3>
+          <button type="button" class="btn-close" (click)="closeModals()">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          @if (selectedSolicitud()) {
+            <div class="details-grid">
+              <div class="detail-item">
+                <label>Nombre de la Mascota:</label>
+                <p>{{ selectedSolicitud()!.nombreMascota }}</p>
+              </div>
+              <div class="detail-item">
+                <label>Propietario:</label>
+                <p>{{ selectedSolicitud()!.nombreCompleto }}</p>
+              </div>
+              <div class="detail-item">
+                <label>Correo:</label>
+                <p>
+                  <a [href]="'mailto:' + selectedSolicitud()!.correo">
+                    {{ selectedSolicitud()!.correo }}
+                  </a>
+                </p>
+              </div>
+              <div class="detail-item">
+                <label>Teléfono:</label>
+                <p>
+                  <a [href]="'tel:' + selectedSolicitud()!.telefono">
+                    {{ selectedSolicitud()!.telefono }}
+                  </a>
+                </p>
+              </div>
+              <div class="detail-item">
+                <label>Servicio:</label>
+                <p>{{ selectedSolicitud()!.servicio }}</p>
+              </div>
+              <div class="detail-item">
+                <label>Estado:</label>
+                <p>
+                  <span [class]="'badge badge-' + (selectedSolicitud()!.estado | lowercase)">
+                    {{ selectedSolicitud()!.estado }}
+                  </span>
+                </p>
+              </div>
+              <div class="detail-item full-width">
+                <label>Mensaje:</label>
+                <p>{{ selectedSolicitud()!.mensaje }}</p>
+              </div>
+              <div class="detail-item">
+                <label>Fecha de Creación:</label>
+                <p>{{ selectedSolicitud()!.fechaCreacion | date: 'dd/MM/yyyy HH:mm' }}</p>
+              </div>
+              @if (selectedSolicitud()!.fechaActualizacion) {
+                <div class="detail-item">
+                  <label>Última Actualización:</label>
+                  <p>{{ selectedSolicitud()!.fechaActualizacion | date: 'dd/MM/yyyy HH:mm' }}</p>
+                </div>
+              }
+              @if (selectedSolicitud()!.fechaEliminacion) {
+                <div class="detail-item">
+                  <label>Fecha de Eliminación:</label>
+                  <p class="text-danger">{{ selectedSolicitud()!.fechaEliminacion | date: 'dd/MM/yyyy HH:mm' }}</p>
+                </div>
+              }
+            </div>
+          }
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" (click)="closeModals()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Edit Modal -->
+  @if (showEditModal()) {
+    <div class="modal-overlay" (click)="closeModals()">
+      <div class="modal-content modal-lg" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Editar Solicitud</h3>
+          <button type="button" class="btn-close" (click)="closeModals()">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          @if (editForm) {
+            <form [formGroup]="editForm" class="edit-form">
+              <div class="form-group">
+                <label for="editNombreCompleto">Nombre Completo:</label>
+                <input
+                  type="text"
+                  id="editNombreCompleto"
+                  formControlName="nombreCompleto"
+                />
+              </div>
+              <div class="form-group">
+                <label for="editCorreo">Correo:</label>
+                <input type="email" id="editCorreo" formControlName="correo" />
+              </div>
+              <div class="form-group">
+                <label for="editTelefono">Teléfono:</label>
+                <input type="tel" id="editTelefono" formControlName="telefono" />
+              </div>
+              <div class="form-group">
+                <label for="editNombreMascota">Nombre Mascota:</label>
+                <input
+                  type="text"
+                  id="editNombreMascota"
+                  formControlName="nombreMascota"
+                />
+              </div>
+              <div class="form-group">
+                <label for="editServicio">Servicio:</label>
+                <select id="editServicio" formControlName="servicio">
+                  <option value="Consulta Veterinaria">Consulta Veterinaria</option>
+                  <option value="Vacunación">Vacunación</option>
+                  <option value="Cirugía">Cirugía</option>
+                  <option value="Grooming">Grooming</option>
+                  <option value="Guardería">Guardería</option>
+                  <option value="Otro">Otro</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="editEstado">Estado:</label>
+                <select id="editEstado" formControlName="estado">
+                  <option value="Pendiente">Pendiente</option>
+                  <option value="Confirmado">Confirmado</option>
+                  <option value="Completado">Completado</option>
+                  <option value="Cancelado">Cancelado</option>
+                </select>
+              </div>
+              <div class="form-group full-width">
+                <label for="editMensaje">Mensaje:</label>
+                <textarea id="editMensaje" formControlName="mensaje" rows="4"></textarea>
+              </div>
+            </form>
+          }
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn-primary"
+            (click)="saveChanges()"
+            [disabled]="!editForm?.valid || isUpdating()"
+          >
+            @if (isUpdating()) {
+              <i class="bi bi-hourglass-split"></i> Guardando...
+            } @else {
+              <i class="bi bi-check-circle-fill"></i> Guardar
+            }
+          </button>
+          <button type="button" class="btn-secondary" (click)="closeModals()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Confirmation Modal -->
+  @if (showConfirmModal()) {
+    <div class="modal-overlay" (click)="closeModals()">
+      <div class="modal-content modal-sm" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>{{ confirmAction() === 'delete' ? 'Eliminar Solicitud' : 'Restaurar Solicitud' }}</h3>
+        </div>
+        <div class="modal-body">
+          <p>
+            @if (confirmAction() === 'delete') {
+              ¿Estás seguro de que deseas eliminar esta solicitud?
+            } @else {
+              ¿Deseas restaurar esta solicitud?
+            }
+          </p>
+          @if (selectedSolicitud()) {
+            <p class="confirm-detail">
+              <strong>Mascota:</strong> {{ selectedSolicitud()!.nombreMascota }}
+            </p>
+          }
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            [class]="confirmAction() === 'delete' ? 'btn-danger' : 'btn-success'"
+            (click)="executeConfirmAction()"
+            [disabled]="isDeleting()"
+          >
+            @if (isDeleting()) {
+              <i class="bi bi-hourglass-split"></i> Procesando...
+            } @else {
+              @if (confirmAction() === 'delete') {
+                <i class="bi bi-trash-fill"></i> Eliminar
+              } @else {
+                <i class="bi bi-arrow-counterclockwise"></i> Restaurar
+              }
+            }
+          </button>
+          <button type="button" class="btn-secondary" (click)="closeModals()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Alert Messages -->
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      <i class="bi bi-check-circle-fill"></i>
+      <p>{{ successMessage() }}</p>
+      <button type="button" class="btn-close" (click)="clearMessages()">
+        <i class="bi bi-x"></i>
+      </button>
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      <i class="bi bi-exclamation-circle-fill"></i>
+      <p>{{ errorMessage() }}</p>
+      <button type="button" class="btn-close" (click)="clearMessages()">
+        <i class="bi bi-x"></i>
+      </button>
+    </div>
+  }
+</div>

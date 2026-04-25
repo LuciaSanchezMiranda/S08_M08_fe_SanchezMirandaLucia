@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { SolicitudCitaService } from '../../services/solicitud-cita.service';
 
 @Component({
   selector: 'app-contact',
@@ -11,12 +13,18 @@ import { ReactiveFormsModule } from '@angular/forms';
   styleUrl: './contact.css'
 })
 export class Contact {
+  private fb = inject(FormBuilder);
+  private solicitudService = inject(SolicitudCitaService);
+  private router = inject(Router);
+
   contactForm: FormGroup;
   submitted = false;
-  success = false;
+  isLoading = signal(false);
+  successMessage = signal('');
+  errorMessage = signal('');
 
   services = [
-    'Consulta veterinaria',
+    'Consulta Veterinaria',
     'Adopción',
     'Grooming & Spa',
     'Guardería / Hotel',
@@ -32,14 +40,14 @@ export class Contact {
     { icon: 'bi-clock-fill', label: 'Horario', value: 'Lun - Dom: 7am - 10pm' }
   ];
 
-  constructor(private fb: FormBuilder) {
+  constructor() {
     this.contactForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern(/^[0-9+\s]{7,15}$/)]],
-      petName: ['', Validators.required],
-      service: ['', Validators.required],
-      message: ['', [Validators.required, Validators.minLength(10)]]
+      nombreCompleto: ['', [Validators.required, Validators.minLength(3)]],
+      correo: ['', [Validators.required, Validators.email]],
+      telefono: ['', [Validators.required, Validators.pattern(/^[0-9+\s\-()]{9,}$/)]],
+      nombreMascota: ['', Validators.required],
+      servicio: ['', Validators.required],
+      mensaje: ['', [Validators.required, Validators.minLength(10)]]
     });
   }
 
@@ -48,10 +56,32 @@ export class Contact {
   onSubmit() {
     this.submitted = true;
     if (this.contactForm.valid) {
-      this.success = true;
-      this.contactForm.reset();
-      this.submitted = false;
-      setTimeout(() => this.success = false, 5000);
+      this.isLoading.set(true);
+      const solicitud = this.contactForm.value;
+
+      this.solicitudService.crear(solicitud).subscribe({
+        next: (response) => {
+          this.isLoading.set(false);
+          this.successMessage.set('¡Tu solicitud de cita ha sido registrada exitosamente! Nos contactaremos pronto.');
+          this.contactForm.reset();
+          this.submitted = false;
+          setTimeout(() => {
+            this.successMessage.set('');
+          }, 5000);
+        },
+        error: (err) => {
+          this.isLoading.set(false);
+          this.errorMessage.set('Error al registrar la solicitud. Intenta de nuevo.');
+          console.error('Error:', err);
+          setTimeout(() => {
+            this.errorMessage.set('');
+          }, 5000);
+        }
+      });
     }
+  }
+
+  goToCrud() {
+    this.router.navigate(['/crud']);
   }
 }
