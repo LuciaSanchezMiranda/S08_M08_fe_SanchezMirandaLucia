@@ -1,69 +1,72 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SolicitudCitaService } from '../../services/solicitud-cita.service';
+import { SolicitudCitaService, SolicitudCita } from '../../services/solicitud-cita.service';
 
 @Component({
   selector: 'app-contact-form',
-  templateUrl: './contact-form.html',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule],
+  templateUrl: './contact-form.html',
   styleUrl: './contact-form.css'
 })
 export class ContactFormComponent {
-  private fb = inject(FormBuilder);
+
   private solicitudService = inject(SolicitudCitaService);
   private router = inject(Router);
 
-  solicitudForm!: FormGroup;
   isLoading = signal(false);
   successMessage = signal('');
   errorMessage = signal('');
 
-  constructor() {
-    this.initializeForm();
-  }
+  solicitud: SolicitudCita = {
+    nombreCompleto: '',
+    correo: '',
+    telefono: '',
+    nombreMascota: '',
+    servicio: '',
+    mensaje: ''
+  };
 
-  private initializeForm(): void {
-    this.solicitudForm = this.fb.group({
-      nombreCompleto: ['', [Validators.required, Validators.minLength(3)]],
-      correo: ['', [Validators.required, Validators.email]],
-      telefono: ['', [Validators.required, Validators.pattern(/^\+?[0-9\s\-()]{9,}$/)]],
-      nombreMascota: ['', [Validators.required, Validators.minLength(2)]],
-      servicio: ['', Validators.required],
-      mensaje: ['', [Validators.required, Validators.minLength(10)]]
-    });
-  }
+  onSubmit(form: any): void {
 
-  onSubmit(): void {
-    if (this.solicitudForm.invalid) {
-      this.errorMessage.set('Por favor, completa correctamente todos los campos del formulario.');
+    if (form.invalid) {
+      this.errorMessage.set('Por favor, completa correctamente todos los campos.');
       return;
     }
 
     this.isLoading.set(true);
-    const solicitud = this.solicitudForm.value;
 
-    this.solicitudService.crear(solicitud).subscribe({
-      next: (response) => {
+    this.solicitudService.crear(this.solicitud).subscribe({
+      next: () => {
         this.isLoading.set(false);
-        this.successMessage.set('¡Tu solicitud de cita ha sido registrada exitosamente! Nos contactaremos pronto.');
-        this.solicitudForm.reset();
+
+        this.successMessage.set(
+          '¡Tu solicitud fue registrada exitosamente!'
+        );
+
+        form.resetForm();
+
         setTimeout(() => {
           this.clearMessages();
         }, 5000);
       },
+
       error: (err) => {
         this.isLoading.set(false);
-        this.errorMessage.set('Error al registrar la solicitud. Intenta de nuevo más tarde.');
-        console.error('Error:', err);
+
+        this.errorMessage.set(
+          'Error al registrar la solicitud.'
+        );
+
+        console.error(err);
       }
     });
   }
 
-  onReset(): void {
-    this.solicitudForm.reset();
+  onReset(form: any): void {
+    form.resetForm();
     this.clearMessages();
   }
 

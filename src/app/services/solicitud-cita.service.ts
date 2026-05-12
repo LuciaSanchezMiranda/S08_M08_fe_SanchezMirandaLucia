@@ -22,7 +22,7 @@ export interface SolicitudCita {
 })
 export class SolicitudCitaService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/solicitudes';
+  private apiUrl = 'http://localhost:8081/api/solicitudes';
 
   listar(): Observable<SolicitudCita[]> {
     return this.http.get<SolicitudCita[]>(this.apiUrl);

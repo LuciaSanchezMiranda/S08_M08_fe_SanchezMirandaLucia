@@ -1,147 +1,355 @@
 <div class="contact-form-container">
   <div class="container">
     <div class="form-wrapper">
-      <h2>Solicitar Cita para tu Mascota</h2>
-      <p class="form-subtitle">Completa el formulario y nos pondremos en contacto contigo pronto</p>
 
-      <form [formGroup]="solicitudForm" (ngSubmit)="onSubmit()" class="form-grid">
+      <h2>Solicitar Cita para tu Mascota</h2>
+
+      <p class="form-subtitle">
+        Completa el formulario y nos pondremos en contacto contigo pronto
+      </p>
+
+      <form
+        #formSolicitud="ngForm"
+        (ngSubmit)="onSubmit(formSolicitud)"
+        class="form-grid"
+      >
+
         <!-- Nombre Completo -->
         <div class="form-group">
-          <label for="nombreCompleto">Nombre Completo *</label>
+
+          <label for="nombreCompleto">
+            Nombre Completo *
+          </label>
+
           <input
             type="text"
             id="nombreCompleto"
-            formControlName="nombreCompleto"
+            name="nombreCompleto"
+            [(ngModel)]="solicitud.nombreCompleto"
+            #nombreCompleto="ngModel"
             placeholder="Tu nombre"
             required
+            minlength="3"
           />
-          @if (solicitudForm.get('nombreCompleto')?.invalid && solicitudForm.get('nombreCompleto')?.touched) {
-            <span class="error-message">El nombre es requerido</span>
+
+          @if (nombreCompleto.invalid && nombreCompleto.touched) {
+
+            @if (nombreCompleto.errors?.['required']) {
+              <span class="error-message">
+                El nombre es requerido
+              </span>
+            }
+
+            @if (nombreCompleto.errors?.['minlength']) {
+              <span class="error-message">
+                Mínimo 3 caracteres
+              </span>
+            }
+
           }
+
         </div>
 
         <!-- Correo -->
         <div class="form-group">
-          <label for="correo">Correo Electrónico *</label>
+
+          <label for="correo">
+            Correo Electrónico *
+          </label>
+
           <input
             type="email"
             id="correo"
-            formControlName="correo"
+            name="correo"
+            [(ngModel)]="solicitud.correo"
+            #correo="ngModel"
             placeholder="tu@correo.com"
             required
+            email
           />
-          @if (solicitudForm.get('correo')?.invalid && solicitudForm.get('correo')?.touched) {
-            <span class="error-message">Correo inválido</span>
+
+          @if (correo.invalid && correo.touched) {
+
+            @if (correo.errors?.['required']) {
+              <span class="error-message">
+                El correo es obligatorio
+              </span>
+            }
+
+            @if (correo.errors?.['email']) {
+              <span class="error-message">
+                Correo inválido
+              </span>
+            }
+
           }
+
         </div>
 
         <!-- Teléfono -->
         <div class="form-group">
-          <label for="telefono">Teléfono *</label>
+
+          <label for="telefono">
+            Teléfono *
+          </label>
+
           <input
             type="tel"
             id="telefono"
-            formControlName="telefono"
+            name="telefono"
+            [(ngModel)]="solicitud.telefono"
+            #telefono="ngModel"
             placeholder="+51 912 345 678"
             required
+            minlength="9"
           />
-          @if (solicitudForm.get('telefono')?.invalid && solicitudForm.get('telefono')?.touched) {
-            <span class="error-message">Teléfono requerido</span>
+
+          @if (telefono.invalid && telefono.touched) {
+
+            @if (telefono.errors?.['required']) {
+              <span class="error-message">
+                El teléfono es obligatorio
+              </span>
+            }
+
+            @if (telefono.errors?.['minlength']) {
+              <span class="error-message">
+                Mínimo 9 caracteres
+              </span>
+            }
+
           }
+
         </div>
 
         <!-- Nombre Mascota -->
         <div class="form-group">
-          <label for="nombreMascota">Nombre de la Mascota *</label>
+
+          <label for="nombreMascota">
+            Nombre de la Mascota *
+          </label>
+
           <input
             type="text"
             id="nombreMascota"
-            formControlName="nombreMascota"
+            name="nombreMascota"
+            [(ngModel)]="solicitud.nombreMascota"
+            #nombreMascota="ngModel"
             placeholder="Nombre de tu mascota"
             required
+            minlength="2"
           />
-          @if (solicitudForm.get('nombreMascota')?.invalid && solicitudForm.get('nombreMascota')?.touched) {
-            <span class="error-message">Nombre de mascota requerido</span>
+
+          @if (nombreMascota.invalid && nombreMascota.touched) {
+
+            @if (nombreMascota.errors?.['required']) {
+              <span class="error-message">
+                El nombre de la mascota es obligatorio
+              </span>
+            }
+
+            @if (nombreMascota.errors?.['minlength']) {
+              <span class="error-message">
+                Mínimo 2 caracteres
+              </span>
+            }
+
           }
+
         </div>
 
         <!-- Servicio -->
         <div class="form-group">
-          <label for="servicio">Servicio Solicitado *</label>
-          <select id="servicio" formControlName="servicio" required>
-            <option value="">-- Selecciona un servicio --</option>
-            <option value="Consulta Veterinaria">Consulta Veterinaria</option>
-            <option value="Vacunación">Vacunación</option>
-            <option value="Cirugía">Cirugía</option>
-            <option value="Grooming">Grooming</option>
-            <option value="Guardería">Guardería</option>
-            <option value="Otro">Otro</option>
+
+          <label for="servicio">
+            Servicio Solicitado *
+          </label>
+
+          <select
+            id="servicio"
+            name="servicio"
+            [(ngModel)]="solicitud.servicio"
+            #servicio="ngModel"
+            required
+          >
+
+            <option value="">
+              -- Selecciona un servicio --
+            </option>
+
+            <option value="Consulta Veterinaria">
+              Consulta Veterinaria
+            </option>
+
+            <option value="Vacunación">
+              Vacunación
+            </option>
+
+            <option value="Cirugía">
+              Cirugía
+            </option>
+
+            <option value="Grooming">
+              Grooming
+            </option>
+
+            <option value="Guardería">
+              Guardería
+            </option>
+
+            <option value="Otro">
+              Otro
+            </option>
+
           </select>
-          @if (solicitudForm.get('servicio')?.invalid && solicitudForm.get('servicio')?.touched) {
-            <span class="error-message">Selecciona un servicio</span>
+
+          @if (servicio.invalid && servicio.touched) {
+
+            <span class="error-message">
+              Selecciona un servicio
+            </span>
+
           }
+
         </div>
 
         <!-- Mensaje -->
         <div class="form-group full-width">
-          <label for="mensaje">Mensaje o Notas Adicionales *</label>
+
+          <label for="mensaje">
+            Mensaje o Notas Adicionales *
+          </label>
+
           <textarea
             id="mensaje"
-            formControlName="mensaje"
+            name="mensaje"
+            [(ngModel)]="solicitud.mensaje"
+            #mensaje="ngModel"
             placeholder="Cuéntanos más sobre tu mascota y sus necesidades..."
             rows="5"
             required
+            minlength="10"
           ></textarea>
-          @if (solicitudForm.get('mensaje')?.invalid && solicitudForm.get('mensaje')?.touched) {
-            <span class="error-message">El mensaje es requerido</span>
+
+          @if (mensaje.invalid && mensaje.touched) {
+
+            @if (mensaje.errors?.['required']) {
+              <span class="error-message">
+                El mensaje es obligatorio
+              </span>
+            }
+
+            @if (mensaje.errors?.['minlength']) {
+              <span class="error-message">
+                Mínimo 10 caracteres
+              </span>
+            }
+
           }
+
         </div>
 
         <!-- Buttons -->
         <div class="form-actions full-width">
-          <button type="submit" class="btn-primary" [disabled]="!solicitudForm.valid || isLoading()">
+
+          <button
+            type="submit"
+            class="btn-primary"
+            [disabled]="formSolicitud.invalid || isLoading()"
+          >
+
             @if (isLoading()) {
-              <i class="bi bi-hourglass-split"></i> Enviando...
+
+              <i class="bi bi-hourglass-split"></i>
+              Enviando...
+
             } @else {
-              <i class="bi bi-send-fill"></i> Solicitar Cita
+
+              <i class="bi bi-send-fill"></i>
+              Solicitar Cita
+
             }
+
           </button>
-          <button type="button" class="btn-secondary" (click)="onReset()">
-            <i class="bi bi-arrow-counterclockwise"></i> Limpiar
+
+          <button
+            type="button"
+            class="btn-secondary"
+            (click)="onReset(formSolicitud)"
+          >
+
+            <i class="bi bi-arrow-counterclockwise"></i>
+            Limpiar
+
           </button>
-          <button type="button" class="btn-outline" (click)="goToCrudPanel()">
-            <i class="bi bi-list-check"></i> Ver Solicitudes
+
+          <button
+            type="button"
+            class="btn-outline"
+            (click)="goToCrudPanel()"
+          >
+
+            <i class="bi bi-list-check"></i>
+            Ver Solicitudes
+
           </button>
+
         </div>
+
       </form>
 
       <!-- Success Message -->
       @if (successMessage()) {
+
         <div class="alert alert-success">
+
           <i class="bi bi-check-circle-fill"></i>
+
           <div>
             <strong>¡Éxito!</strong>
             <p>{{ successMessage() }}</p>
           </div>
-          <button type="button" class="btn-close" (click)="clearMessages()">
+
+          <button
+            type="button"
+            class="btn-close"
+            (click)="clearMessages()"
+          >
+
             <i class="bi bi-x"></i>
+
           </button>
+
         </div>
+
       }
 
       <!-- Error Message -->
       @if (errorMessage()) {
+
         <div class="alert alert-error">
+
           <i class="bi bi-exclamation-circle-fill"></i>
+
           <div>
             <strong>Error</strong>
             <p>{{ errorMessage() }}</p>
           </div>
-          <button type="button" class="btn-close" (click)="clearMessages()">
+
+          <button
+            type="button"
+            class="btn-close"
+            (click)="clearMessages()"
+          >
+
             <i class="bi bi-x"></i>
+
           </button>
+
         </div>
+
       }
+
     </div>
   </div>
 </div>
