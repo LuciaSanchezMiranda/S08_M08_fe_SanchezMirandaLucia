@@ -234,7 +234,7 @@
       <div class="modal-body">
 
         <form
-          #editSolicitudForm="ngForm"
+          [formGroup]="editForm"
           class="edit-form"
         >
 
@@ -247,22 +247,19 @@
             <input
               type="text"
               id="editNombreCompleto"
-              name="nombreCompleto"
-              [(ngModel)]="editSolicitud.nombreCompleto"
-              #nombreCompleto="ngModel"
-              required
-              minlength="3"
+              formControlName="nombreCompleto"
+              [class.invalid]="isFieldInvalid('nombreCompleto')"
             />
 
-            @if (nombreCompleto.invalid && nombreCompleto.touched) {
+            @if (isFieldInvalid('nombreCompleto')) {
 
-              @if (nombreCompleto.errors?.['required']) {
+              @if (editForm.get('nombreCompleto')?.errors?.['required']) {
                 <span class="error-message">
                   El nombre es obligatorio
                 </span>
               }
 
-              @if (nombreCompleto.errors?.['minlength']) {
+              @if (editForm.get('nombreCompleto')?.errors?.['minlength']) {
                 <span class="error-message">
                   Mínimo 3 caracteres
                 </span>
@@ -280,22 +277,19 @@
             <input
               type="email"
               id="editCorreo"
-              name="correo"
-              [(ngModel)]="editSolicitud.correo"
-              #correo="ngModel"
-              required
-              email
+              formControlName="correo"
+              [class.invalid]="isFieldInvalid('correo')"
             />
 
-            @if (correo.invalid && correo.touched) {
+            @if (isFieldInvalid('correo')) {
 
-              @if (correo.errors?.['required']) {
+              @if (editForm.get('correo')?.errors?.['required']) {
                 <span class="error-message">
                   El correo es obligatorio
                 </span>
               }
 
-              @if (correo.errors?.['email']) {
+              @if (editForm.get('correo')?.errors?.['email']) {
                 <span class="error-message">
                   Correo inválido
                 </span>
@@ -313,22 +307,19 @@
             <input
               type="tel"
               id="editTelefono"
-              name="telefono"
-              [(ngModel)]="editSolicitud.telefono"
-              #telefono="ngModel"
-              required
-              minlength="9"
+              formControlName="telefono"
+              [class.invalid]="isFieldInvalid('telefono')"
             />
 
-            @if (telefono.invalid && telefono.touched) {
+            @if (isFieldInvalid('telefono')) {
 
-              @if (telefono.errors?.['required']) {
+              @if (editForm.get('telefono')?.errors?.['required']) {
                 <span class="error-message">
                   El teléfono es obligatorio
                 </span>
               }
 
-              @if (telefono.errors?.['minlength']) {
+              @if (editForm.get('telefono')?.errors?.['minlength']) {
                 <span class="error-message">
                   Mínimo 9 caracteres
                 </span>
@@ -346,22 +337,19 @@
             <input
               type="text"
               id="editNombreMascota"
-              name="nombreMascota"
-              [(ngModel)]="editSolicitud.nombreMascota"
-              #nombreMascota="ngModel"
-              required
-              minlength="2"
+              formControlName="nombreMascota"
+              [class.invalid]="isFieldInvalid('nombreMascota')"
             />
 
-            @if (nombreMascota.invalid && nombreMascota.touched) {
+            @if (isFieldInvalid('nombreMascota')) {
 
-              @if (nombreMascota.errors?.['required']) {
+              @if (editForm.get('nombreMascota')?.errors?.['required']) {
                 <span class="error-message">
                   El nombre de la mascota es obligatorio
                 </span>
               }
 
-              @if (nombreMascota.errors?.['minlength']) {
+              @if (editForm.get('nombreMascota')?.errors?.['minlength']) {
                 <span class="error-message">
                   Mínimo 2 caracteres
                 </span>
@@ -378,10 +366,8 @@
 
             <select
               id="editServicio"
-              name="servicio"
-              [(ngModel)]="editSolicitud.servicio"
-              #servicio="ngModel"
-              required
+              formControlName="servicio"
+              [class.invalid]="isFieldInvalid('servicio')"
             >
 
               <option value="Consulta Veterinaria">Consulta Veterinaria</option>
@@ -393,7 +379,7 @@
 
             </select>
 
-            @if (servicio.invalid && servicio.touched) {
+            @if (isFieldInvalid('servicio')) {
               <span class="error-message">
                 Selecciona un servicio
               </span>
@@ -409,10 +395,8 @@
 
             <select
               id="editEstado"
-              name="estado"
-              [(ngModel)]="editSolicitud.estado"
-              #estado="ngModel"
-              required
+              formControlName="estado"
+              [class.invalid]="isFieldInvalid('estado')"
             >
 
               <option value="Pendiente">Pendiente</option>
@@ -422,7 +406,7 @@
 
             </select>
 
-            @if (estado.invalid && estado.touched) {
+            @if (isFieldInvalid('estado')) {
               <span class="error-message">
                 Selecciona un estado
               </span>
@@ -439,23 +423,20 @@
 
             <textarea
               id="editMensaje"
-              name="mensaje"
-              [(ngModel)]="editSolicitud.mensaje"
-              #mensaje="ngModel"
+              formControlName="mensaje"
               rows="4"
-              required
-              minlength="10"
+              [class.invalid]="isFieldInvalid('mensaje')"
             ></textarea>
 
-            @if (mensaje.invalid && mensaje.touched) {
+            @if (isFieldInvalid('mensaje')) {
 
-              @if (mensaje.errors?.['required']) {
+              @if (editForm.get('mensaje')?.errors?.['required']) {
                 <span class="error-message">
                   El mensaje es obligatorio
                 </span>
               }
 
-              @if (mensaje.errors?.['minlength']) {
+              @if (editForm.get('mensaje')?.errors?.['minlength']) {
                 <span class="error-message">
                   Mínimo 10 caracteres
                 </span>
@@ -474,8 +455,8 @@
         <button
           type="button"
           class="btn-primary"
-          (click)="saveChanges(editSolicitudForm)"
-          [disabled]="editSolicitudForm.invalid || isUpdating()"
+          (click)="saveChanges()"
+          [disabled]="editForm.invalid || isUpdating()"
         >
 
           @if (isUpdating()) {

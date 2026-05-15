@@ -9,8 +9,8 @@
       </p>
 
       <form
-        #formSolicitud="ngForm"
-        (ngSubmit)="onSubmit(formSolicitud)"
+        [formGroup]="solicitudForm"
+        (ngSubmit)="onSubmit()"
         class="form-grid"
       >
 
@@ -24,23 +24,20 @@
           <input
             type="text"
             id="nombreCompleto"
-            name="nombreCompleto"
-            [(ngModel)]="solicitud.nombreCompleto"
-            #nombreCompleto="ngModel"
+            formControlName="nombreCompleto"
             placeholder="Tu nombre"
-            required
-            minlength="3"
+            [class.invalid]="isFieldInvalid('nombreCompleto')"
           />
 
-          @if (nombreCompleto.invalid && nombreCompleto.touched) {
+          @if (isFieldInvalid('nombreCompleto')) {
 
-            @if (nombreCompleto.errors?.['required']) {
+            @if (solicitudForm.get('nombreCompleto')?.errors?.['required']) {
               <span class="error-message">
                 El nombre es requerido
               </span>
             }
 
-            @if (nombreCompleto.errors?.['minlength']) {
+            @if (solicitudForm.get('nombreCompleto')?.errors?.['minlength']) {
               <span class="error-message">
                 Mínimo 3 caracteres
               </span>
@@ -60,23 +57,20 @@
           <input
             type="email"
             id="correo"
-            name="correo"
-            [(ngModel)]="solicitud.correo"
-            #correo="ngModel"
+            formControlName="correo"
             placeholder="tu@correo.com"
-            required
-            email
+            [class.invalid]="isFieldInvalid('correo')"
           />
 
-          @if (correo.invalid && correo.touched) {
+          @if (isFieldInvalid('correo')) {
 
-            @if (correo.errors?.['required']) {
+            @if (solicitudForm.get('correo')?.errors?.['required']) {
               <span class="error-message">
                 El correo es obligatorio
               </span>
             }
 
-            @if (correo.errors?.['email']) {
+            @if (solicitudForm.get('correo')?.errors?.['email']) {
               <span class="error-message">
                 Correo inválido
               </span>
@@ -96,23 +90,20 @@
           <input
             type="tel"
             id="telefono"
-            name="telefono"
-            [(ngModel)]="solicitud.telefono"
-            #telefono="ngModel"
+            formControlName="telefono"
             placeholder="+51 912 345 678"
-            required
-            minlength="9"
+            [class.invalid]="isFieldInvalid('telefono')"
           />
 
-          @if (telefono.invalid && telefono.touched) {
+          @if (isFieldInvalid('telefono')) {
 
-            @if (telefono.errors?.['required']) {
+            @if (solicitudForm.get('telefono')?.errors?.['required']) {
               <span class="error-message">
                 El teléfono es obligatorio
               </span>
             }
 
-            @if (telefono.errors?.['minlength']) {
+            @if (solicitudForm.get('telefono')?.errors?.['minlength']) {
               <span class="error-message">
                 Mínimo 9 caracteres
               </span>
@@ -132,23 +123,20 @@
           <input
             type="text"
             id="nombreMascota"
-            name="nombreMascota"
-            [(ngModel)]="solicitud.nombreMascota"
-            #nombreMascota="ngModel"
+            formControlName="nombreMascota"
             placeholder="Nombre de tu mascota"
-            required
-            minlength="2"
+            [class.invalid]="isFieldInvalid('nombreMascota')"
           />
 
-          @if (nombreMascota.invalid && nombreMascota.touched) {
+          @if (isFieldInvalid('nombreMascota')) {
 
-            @if (nombreMascota.errors?.['required']) {
+            @if (solicitudForm.get('nombreMascota')?.errors?.['required']) {
               <span class="error-message">
                 El nombre de la mascota es obligatorio
               </span>
             }
 
-            @if (nombreMascota.errors?.['minlength']) {
+            @if (solicitudForm.get('nombreMascota')?.errors?.['minlength']) {
               <span class="error-message">
                 Mínimo 2 caracteres
               </span>
@@ -167,10 +155,8 @@
 
           <select
             id="servicio"
-            name="servicio"
-            [(ngModel)]="solicitud.servicio"
-            #servicio="ngModel"
-            required
+            formControlName="servicio"
+            [class.invalid]="isFieldInvalid('servicio')"
           >
 
             <option value="">
@@ -203,7 +189,7 @@
 
           </select>
 
-          @if (servicio.invalid && servicio.touched) {
+          @if (isFieldInvalid('servicio')) {
 
             <span class="error-message">
               Selecciona un servicio
@@ -222,24 +208,21 @@
 
           <textarea
             id="mensaje"
-            name="mensaje"
-            [(ngModel)]="solicitud.mensaje"
-            #mensaje="ngModel"
+            formControlName="mensaje"
             placeholder="Cuéntanos más sobre tu mascota y sus necesidades..."
             rows="5"
-            required
-            minlength="10"
+            [class.invalid]="isFieldInvalid('mensaje')"
           ></textarea>
 
-          @if (mensaje.invalid && mensaje.touched) {
+          @if (isFieldInvalid('mensaje')) {
 
-            @if (mensaje.errors?.['required']) {
+            @if (solicitudForm.get('mensaje')?.errors?.['required']) {
               <span class="error-message">
                 El mensaje es obligatorio
               </span>
             }
 
-            @if (mensaje.errors?.['minlength']) {
+            @if (solicitudForm.get('mensaje')?.errors?.['minlength']) {
               <span class="error-message">
                 Mínimo 10 caracteres
               </span>
@@ -255,7 +238,7 @@
           <button
             type="submit"
             class="btn-primary"
-            [disabled]="formSolicitud.invalid || isLoading()"
+            [disabled]="solicitudForm.invalid || isLoading()"
           >
 
             @if (isLoading()) {
@@ -275,7 +258,7 @@
           <button
             type="button"
             class="btn-secondary"
-            (click)="onReset(formSolicitud)"
+            (click)="onReset()"
           >
 
             <i class="bi bi-arrow-counterclockwise"></i>

@@ -1,21 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface SolicitudCita {
-  idSolicitud?: number;
-  nombreCompleto: string;
-  correo: string;
-  telefono: string;
-  nombreMascota: string;
-  servicio: string;
-  mensaje: string;
-  estado?: string;
-  fechaCreacion?: string;
-  fechaActualizacion?: string;
-  fechaEliminacion?: string;
-  fechaRestauracion?: string;
-}
+import { SolicitudCita } from '../models/solicitud-cita.model';
 
 @Injectable({
   providedIn: 'root'

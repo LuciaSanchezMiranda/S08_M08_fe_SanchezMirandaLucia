@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SolicitudCitaService } from '../../services/solicitud-cita.service';
+import { SolicitudCitaService } from '../../../core/services/solicitud-cita.service';
 
 @Component({
   selector: 'app-contact',
